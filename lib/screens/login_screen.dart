@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
           signIn(emailController.text, passwordController.text);
         },
         child: Text(
-          "login",
+          "Login",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),

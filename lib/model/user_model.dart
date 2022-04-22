@@ -1,13 +1,13 @@
 class UserModel {
   String? uid;
   String? email;
-  String? name;
+  String? nama;
   String? password;
 
   UserModel({
     this.uid,
     this.email,
-    this.name,
+    this.nama,
   });
 
   //receive data from server
@@ -15,7 +15,7 @@ class UserModel {
     return UserModel(
       uid: map['uid'],
       email: map['email'],
-      name: map['name'],
+      nama: map['nama'],
     );
   }
 
@@ -23,7 +23,7 @@ class UserModel {
     return {
       'uid': uid,
       'email': email,
-      'name': name,
+      'nama': nama,
     };
   }
 }

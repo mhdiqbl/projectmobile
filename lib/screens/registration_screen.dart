@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:project1/model/user_model.dart';
 import 'package:project1/screens/registration_screen.dart';
 import 'package:project1/screens/login_screen.dart';
 import 'package:project1/main.dart';
@@ -12,6 +16,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   //editing controller
   final TextEditingController namaController = TextEditingController();
@@ -70,6 +75,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       autofocus: false,
       controller: passwordController,
       textInputAction: TextInputAction.done,
+      obscureText: true,
       validator: (value) {
         RegExp regex = new RegExp(r'^.{6,}$');
         if (value!.isEmpty) {
@@ -86,34 +92,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
     );
 
-    final confirmpasswordfield = TextFormField(
+    final confirmPasswordField = TextFormField(
       autofocus: false,
       controller: confirmPasswordEditingController,
       obscureText: true,
-      textInputAction: TextInputAction.done,
       validator: (value) {
-        if (confirmPasswordEditingController.text.length > 6 &&
-            confirmPasswordEditingController.text != value) {
+        if (confirmPasswordEditingController.text != passwordController.text) {
           return "Password dont match";
         }
         return null;
       },
+      onSaved: (value) {
+        confirmPasswordEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.done,
       decoration: InputDecoration(
           prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Password",
+          hintText: "Confirm Password",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
     );
-    final LoginButton = Material(
+    final signUpButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
       color: Colors.redAccent,
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
-        onPressed: () {},
+        onPressed: () {
+          signUp(emailController.text, passwordController.text);
+        },
         child: Text(
-          "login",
+          "Regiter",
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
@@ -146,8 +156,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         emailfield,
                         SizedBox(height: 10),
                         passwordfield,
+                        SizedBox(height: 10),
+                        confirmPasswordField,
                         SizedBox(height: 45),
-                        LoginButton,
+                        signUpButton,
                         SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -176,9 +188,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ));
   }
 
-  void signUp(String emai, String password) async {
+  void signUp(String email, String password) async {
     if (_formKey.currentState!.validate()) {
-      
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {postDetailsToFirestore()})
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message);
+      });
     }
+  }
+
+  postDetailsToFirestore() async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.nama = namaController.text;
+
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+    Fluttertoast.showToast(msg: "Account created successfully");
+
+    Navigator.pushAndRemoveUntil(
+        (context),
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+        (route) => false);
   }
 }
