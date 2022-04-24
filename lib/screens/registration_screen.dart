@@ -89,7 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
     );
 
     final confirmPasswordField = TextFormField(
@@ -110,12 +110,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Confirm Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
     );
     final signUpButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Color.fromARGB(255, 35, 125, 185),
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
@@ -145,7 +145,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                            height: 45,
+                            height: 200,
                             child: Image.asset(
                               'assets/login.png',
                               fit: BoxFit.scaleDown,

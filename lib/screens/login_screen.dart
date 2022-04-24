@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:project1/screens/registration_screen.dart';
+import 'package:project1/screens/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -62,13 +63,13 @@ class _LoginScreenState extends State<LoginScreen> {
           prefixIcon: Icon(Icons.vpn_key),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),
     );
 
     final LoginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Color.fromARGB(255, 35, 125, 185),
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
@@ -98,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                            height: 45,
+                            height: 200,
                             child: Image.asset(
                               'assets/login.png',
                               fit: BoxFit.scaleDown,
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .then((uuid) => {
                 Fluttertoast.showToast(msg: "Login Successful"),
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => RegistrationScreen())),
+                    MaterialPageRoute(builder: (context) => HomePage())),
               })
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message);
